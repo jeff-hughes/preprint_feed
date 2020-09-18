@@ -9,6 +9,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.meta/
+data/
 
 # Python
 __pycache__/
