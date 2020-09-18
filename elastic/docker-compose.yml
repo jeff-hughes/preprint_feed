@@ -1,0 +1,18 @@
+version: '3'
+services:
+  elasticsearch:
+    image: elasticsearch:7.9.1
+    ports:
+      - "9200:9200"
+    volumes:
+      - els-data:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+    environment:
+      - discovery.type=single-node
+
+networks:
+  elastic:
+
+volumes:
+  els-data:
