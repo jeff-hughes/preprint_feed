@@ -23,9 +23,9 @@ def to_datetime(date_string):
 
 connections.create_connection(hosts=[os.getenv("ELASTIC_HOST")], timeout=20)
 
-documents = []
 with open(file, "r") as f:
-    # i = 0
+    documents = []
+    i = 0
     for line in f:
         data = json.loads(line)
         preprint = Preprint(
@@ -46,12 +46,14 @@ with open(file, "r") as f:
             categories=data['categories'].split(' ')
         )
         documents.append(preprint)
-        # i += 1
-        # if i >= 10:
-        #     break
-
-print(f"Adding {len(data)} documents to database")
-bulk(connections.get_connection(), (d.to_dict(True) for d in documents))
+        i += 1
+        if i % 100 == 0:
+            print(f"Adding {len(documents)} documents to database [{datetime.now()}]")
+            bulk(connections.get_connection(), (d.to_dict(True) for d in documents))
+            documents = []
+    
+    print(f"Adding {len(data)} documents to database")
+    bulk(connections.get_connection(), (d.to_dict(True) for d in documents))
 
 # data = []
 # oldest_date = None
