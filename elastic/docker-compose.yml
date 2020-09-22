@@ -10,6 +10,8 @@ services:
       - elastic
     environment:
       - discovery.type=single-node
+      - http.port=9200
+      - "ES_JAVA_OPTS=-Xms750m -Xmx750m"
 
 networks:
   elastic:

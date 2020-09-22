@@ -52,27 +52,5 @@ with open(file, "r") as f:
             bulk(connections.get_connection(), (d.to_dict(True) for d in documents))
             documents = []
     
-    print(f"Adding {len(data)} documents to database")
+    print(f"Adding {len(data)} documents to database [{datetime.now()}]")
     bulk(connections.get_connection(), (d.to_dict(True) for d in documents))
-
-# data = []
-# oldest_date = None
-# newest_date = None
-# with open(file, "r") as f:
-#     i = 0
-#     for line in f:
-#         newdata = json.loads(line)
-#         data.append(newdata)
-#         v1_date = to_datetime(newdata["versions"][0]["created"])
-#         vn_date = to_datetime(newdata["versions"][len(newdata["versions"])-1]["created"])
-#         if oldest_date is None or v1_date < oldest_date:
-#             oldest_date = v1_date
-#         if newest_date is None or vn_date > newest_date:
-#             newest_date = vn_date
-#         i += 1
-#         # if i >= 5:
-#         #     break
-
-# # print(data[0])
-# print(oldest_date)
-# print(newest_date)
