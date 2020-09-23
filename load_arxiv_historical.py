@@ -1,3 +1,11 @@
+"""Loads all historical arXiv data into database
+
+This script only needs to be run once when the database is being set up;
+it reads in historical data from a JSON file (downloaded in bulk) and
+feeds it into the database. Database must already be running and the
+document schema/mapping already created.
+"""
+
 import os
 import json
 from datetime import datetime
@@ -46,9 +54,8 @@ with open(file, "r") as f:
             categories=data['categories'].split(' ')
         )
         documents.append(preprint)
-        i += 1
         if i % 100 == 0:
-            print(f"Adding {len(documents)} documents to database [{datetime.now()}]")
+            print(f"Adding {len(documents)} documents ({i} so far) to database [{datetime.now()}]")
             bulk(connections.get_connection(), (d.to_dict(True) for d in documents))
             documents = []
     

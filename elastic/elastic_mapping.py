@@ -1,3 +1,12 @@
+"""Stores the mapping schema for preprint documents for elasticsearch
+
+When imported, this provides a class that identifies the relevant data
+for importing preprints into elasticsearch. When run directly as a script,
+it will initialize the mapping for a Preprint in the database if it does
+not already exist. This only needs to be done once, when the database is
+first set up.
+"""
+
 from elasticsearch_dsl import Date, DenseVector, Document, Keyword, Text
 
 class Preprint(Document):

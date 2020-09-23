@@ -1,3 +1,5 @@
+"""Misc. functions to test querying from arXiv and OSF APIs"""
+
 import requests
 import xmltodict
 import time
@@ -50,11 +52,11 @@ def get_arxiv(date):
                 resume = False
 
     print("Saving data...")
-    with open("data/test_arxiv.pkl", "wb") as f:
+    with open("../data/test_arxiv.pkl", "wb") as f:
         pickle.dump(data, f)
 
 def read_arxiv():
-    with open("data/test_arxiv.pkl", "rb") as f:
+    with open("../data/test_arxiv.pkl", "rb") as f:
         data = pickle.load(f)
 
     print(f"Num. records: {len(data)}")
@@ -146,11 +148,11 @@ def get_osf(date):
             print(i)
 
     print("Saving data...")
-    with open("data/test_osf.pkl", "wb") as f:
+    with open("../data/test_osf.pkl", "wb") as f:
         pickle.dump(data, f)
 
 def read_osf():
-    with open("data/test_osf.pkl", "rb") as f:
+    with open("../data/test_osf.pkl", "rb") as f:
         data = pickle.load(f)
     print(f"Num. records: {len(data)}")
     for d in data[0:10]:

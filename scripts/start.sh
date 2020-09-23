@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Main script for loading up full app, including database, data, and server
+
 # change to the root project directory (up one level from current script dir)
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 cd ".."
