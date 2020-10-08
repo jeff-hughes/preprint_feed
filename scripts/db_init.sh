@@ -3,9 +3,8 @@
 # Sets up the elasticsearch database (in docker) and initializes document
 # schemas/mappings
 
-# change to the root project directory (up one level from current script dir)
-cd "$( dirname "${BASH_SOURCE[0]}" )"
-cd ".."
+# change to the root project directory
+cd "~/preprint_recommender"
 
 # if local environment files exist, source them first
 if [ -f ".env" ]; then
@@ -35,9 +34,10 @@ done
 # if necessary
 cd "elastic"
 if [ "$DO_MAPPING" = true ]; then
-    sudo docker-compose up -d \
+    docker-compose up -d \
+        && echo "Waiting for database to initialize..." \
         && sleep 30 \
         && python3 ./elastic_mapping.py
 else
-    sudo docker-compose up -d
+    docker-compose up -d
 fi

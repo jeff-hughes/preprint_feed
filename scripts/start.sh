@@ -2,9 +2,8 @@
 
 # Main script for loading up full app, including database, data, and server
 
-# change to the root project directory (up one level from current script dir)
-cd "$( dirname "${BASH_SOURCE[0]}" )"
-cd ".."
+# change to the root project directory
+cd "~/preprint_recommender"
 
 # if local environment files exist, source them first
 if [ -f ".env" ]; then
