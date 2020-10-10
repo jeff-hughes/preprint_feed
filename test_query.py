@@ -6,7 +6,8 @@ from itertools import islice
 from elasticsearch_dsl import connections
 from elastic.elastic_mapping import Preprint
 
-connections.create_connection(hosts=[os.getenv("ELASTIC_HOST")], timeout=20)
+elastic_host = f"{os.getenv('ELASTIC_ADMIN_USER')}:{os.getenv('ELASTIC_ADMIN_PASS')}@{os.getenv('ELASTIC_HOST')}"
+connections.create_connection(hosts=[elastic_host], timeout=20)
 
 # making a typical search query ------------------------------------------
 
@@ -63,7 +64,7 @@ print()
 
 import elasticsearch
 
-es = elasticsearch.Elasticsearch(hosts=[os.getenv("ELASTIC_HOST")], timeout=20)
+es = elasticsearch.Elasticsearch(hosts=[elastic_host], timeout=20)
 
 batch_size = 5
 search = es.search(index="preprint", params={"scroll": "1m", "size": batch_size})

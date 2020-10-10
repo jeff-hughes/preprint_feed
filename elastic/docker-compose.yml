@@ -3,7 +3,7 @@ services:
   elasticsearch:
     image: elasticsearch:7.9.1
     ports:
-      - "9200:9200"
+      - "9222:9200"
     volumes:
       - els-data:/usr/share/elasticsearch/data
     networks:
@@ -11,6 +11,8 @@ services:
     environment:
       - discovery.type=single-node
       - http.port=9200
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=${ELASTIC_ADMIN_PASS}
       - "ES_JAVA_OPTS=-Xms750m -Xmx750m"
 
 networks:

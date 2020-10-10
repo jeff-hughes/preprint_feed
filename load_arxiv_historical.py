@@ -29,7 +29,8 @@ def to_datetime(date_string):
     return datetime.strptime(date_string, "%a, %d %b %Y %H:%M:%S %Z")
 
 
-connections.create_connection(hosts=[os.getenv("ELASTIC_HOST")], timeout=20)
+elastic_host = f"{os.getenv('ELASTIC_ADMIN_USER')}:{os.getenv('ELASTIC_ADMIN_PASS')}@{os.getenv('ELASTIC_HOST')}"
+connections.create_connection(hosts=[elastic_host], timeout=20)
 
 with open(file, "r") as f:
     documents = []

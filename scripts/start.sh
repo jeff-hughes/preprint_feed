@@ -3,7 +3,7 @@
 # Main script for loading up full app, including database, data, and server
 
 # change to the root project directory
-cd "~/preprint_recommender"
+cd "$HOME/preprint_recommender"
 
 # if local environment files exist, source them first
 if [ -f ".env" ]; then
@@ -46,5 +46,5 @@ else
     # this would be useful for restarting the app, where we still
     # have data in the database
     echo "Initializing database..."
-    ./scripts/db_init.sh --nomap
+    ./scripts/db_init.sh --nomap --nousers
 fi

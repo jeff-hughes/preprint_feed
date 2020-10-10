@@ -4,7 +4,7 @@
 # schemas/mappings
 
 # change to the root project directory
-cd "~/preprint_recommender"
+cd "$HOME/preprint_recommender"
 
 # if local environment files exist, source them first
 if [ -f ".env" ]; then
@@ -12,12 +12,16 @@ if [ -f ".env" ]; then
 fi
 
 DO_MAPPING=true
+SET_USERS=true
 
 # handle command line arguments
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --nomap)
             DO_MAPPING=false
+            shift;;
+        --nousers)
+            SET_USERS=false
             shift;;
         -?*)
             echo "ERROR: Unknown option: $1"
@@ -33,11 +37,15 @@ done
 # set up elasticsearch in docker container, and create mapping schemas
 # if necessary
 cd "elastic"
-if [ "$DO_MAPPING" = true ]; then
-    docker-compose up -d \
-        && echo "Waiting for database to initialize..." \
-        && sleep 30 \
-        && python3 ./elastic_mapping.py
-else
-    docker-compose up -d
+
+docker-compose up -d \
+    && echo "Waiting for database to initialize..." \
+    && sleep 30
+
+if [[ "$SET_USERS" == true ]]; then
+    ../scripts/db_set_users.sh
+fi
+
+if [[ "$DO_MAPPING" == true ]]; then
+    python3 ./elastic_mapping.py
 fi

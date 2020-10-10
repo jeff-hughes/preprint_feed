@@ -42,7 +42,8 @@ if __name__ == "__main__":
     import os
     from elasticsearch_dsl import connections
 
-    connections.create_connection(hosts=[os.getenv("ELASTIC_HOST")], timeout=20)
+    elastic_host = f"{os.getenv('ELASTIC_ADMIN_USER')}:{os.getenv('ELASTIC_ADMIN_PASS')}@{os.getenv('ELASTIC_HOST')}"
+    connections.create_connection(hosts=[elastic_host], timeout=20)
 
     if not Preprint._index.exists():
         print("Initializing preprint index")
