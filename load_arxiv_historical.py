@@ -55,6 +55,7 @@ with open(file, "r") as f:
             categories=data['categories'].split(' ')
         )
         documents.append(preprint)
+        i += 1
         if i % 1000 == 0:
             print(f"Adding {len(documents)} documents ({i} so far) to database [{datetime.now()}]")
             bulk(connections.get_connection(), (d.to_dict(True) for d in documents))

@@ -40,7 +40,7 @@ cd "elastic"
 
 docker-compose up -d \
     && echo "Waiting for database to initialize..." \
-    && sleep 30
+    && sleep 60
 
 if [[ "$SET_USERS" == true ]]; then
     ../scripts/db_set_users.sh
