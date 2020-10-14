@@ -61,5 +61,5 @@ with open(file, "r") as f:
             bulk(connections.get_connection(), (d.to_dict(True) for d in documents))
             documents = []
     
-    print(f"Adding {len(data)} documents to database [{datetime.now()}]")
+    print(f"Adding {len(documents)} documents ({i} so far) to database [{datetime.now()}]")
     bulk(connections.get_connection(), (d.to_dict(True) for d in documents))
