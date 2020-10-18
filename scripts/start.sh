@@ -41,7 +41,8 @@ if [ "$LOAD_DATA" = true ]; then
     # initialize database, then load historical arXiv data
     echo "Initializing database and loading data..."
     ./scripts/db_init.sh \
-        && python3 load_arxiv_historical.py
+        && python3 load_arxiv_historical.py \
+        && python3 load_osf_historical.py
 else
     # this would be useful for restarting the app, where we still
     # have data in the database
