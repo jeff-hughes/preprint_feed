@@ -28,6 +28,34 @@ def strip_newlines(text):
 def to_datetime(date_string):
     return datetime.strptime(date_string, "%a, %d %b %Y %H:%M:%S %Z")
 
+def convert_category(cat):
+    """arXiv has changed their category structure at various points; this
+    maps older articles to their newer categories"""
+    arxiv_rules = {
+        "acc-phys": "physics.acc-ph",
+        "adap-org": "nlin.AO",
+        "alg-geom": "math.AG",
+        "ao-sci": "physics.ao-ph",
+        "atom-ph": "physics.atom-ph",
+        "bayes-an": "physics.data-an",
+        "chao-dyn": "nlin.CD",
+        "chem-ph": "physics.chem-ph",
+        "cmp-lg": "cs.CL",
+        "comp-gas": "nlin.CG",
+        "dg-ga": "math.DG",
+        "funct-an": "math.FA",
+        "mtrl-th": "cond-mat.mtrl-sci",
+        "patt-sol": "nlin.PS",
+        "plasm-ph": "physics.plasm-ph",
+        "q-alg": "math.QA",
+        "solv-int": "nlin.SI",
+        "supr-con": "cond-mat.supr-con"
+    }
+    if cat in arxiv_rules:
+        return arxiv_rules[cat]
+    else:
+        return cat
+
 
 elastic_host = f"{os.getenv('ELASTIC_ADMIN_USER')}:{os.getenv('ELASTIC_ADMIN_PASS')}@{os.getenv('ELASTIC_HOST')}"
 connections.create_connection(hosts=[elastic_host], timeout=20)
@@ -37,22 +65,23 @@ with open(file, "r") as f:
     i = 0
     for line in f:
         data = json.loads(line)
+        categories = data["categories"].split(" ")
+        categories = [convert_category(c) for c in categories]
+
         preprint = Preprint(
             url=f"https://arxiv.org/abs/{data['id']}",
             source="arXiv",
-            source_id=data['id'],
-            publish_date=to_datetime(data['versions'][0]['created']),
-            modified_date=to_datetime(data['versions'][len(data['versions'])-1]['created']),
+            source_id=data["id"],
+            publish_date=to_datetime(data["versions"][0]["created"]),
+            modified_date=to_datetime(data["versions"][len(data["versions"])-1]["created"]),
             stored_date=datetime.now(),
-            title=strip_newlines(data['title']),
+            title=strip_newlines(data["title"]),
             # TODO: Need to figure out how to deal with LaTeX code
-            abstract=strip_newlines(data['abstract']),
+            abstract=strip_newlines(data["abstract"]),
             # TODO: Format authors appropriately;
             # also deal with special characters
-            authors=data['authors'],
-            # TODO: We will need to standardize the category labels
-            # somehow
-            categories=data['categories'].split(' ')
+            authors=data["authors"],
+            categories=categories
         )
         documents.append(preprint)
         i += 1

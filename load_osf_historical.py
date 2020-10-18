@@ -90,27 +90,36 @@ for fl in input_files:
     with open(fl, "rb") as f:
         data_block = pickle.load(f)
 
-    for data in data_block:
-        pub_date = data["data"]["attributes"]["date_published"]
+    for item in data_block:
+        data = item["data"]
+        pub_date = data["attributes"]["date_published"]
         if pub_date is None:
-            pub_date = data["data"]["attributes"]["date_created"]
+            pub_date = data["attributes"]["date_created"]
+
+        # turns hierarchy of categories into a flat list of categories,
+        # with lower-level categories denoted by " > "
+        # e.g., "Business > Accounting"
+        all_categories = data["attributes"]["subjects"]
+        categories = []
+        for group in all_categories:
+            chain = [c["text"] for c in group]
+            text = " > ".join(chain[:2])  # max. 2 levels
+            categories.append(text)
 
         preprint = Preprint(
-            url=data["data"]["links"]["html"],
-            source=get_provider(data["data"]["relationships"]["provider"]["links"]["related"]["href"]),
-            source_id=data["data"]["id"],
+            url=data["links"]["html"],
+            source=get_provider(data["relationships"]["provider"]["links"]["related"]["href"]),
+            source_id=data["id"],
             publish_date=datetime.fromisoformat(pub_date),
-            modified_date=datetime.fromisoformat(data["data"]["attributes"]["date_modified"]),
+            modified_date=datetime.fromisoformat(data["attributes"]["date_modified"]),
             stored_date=datetime.now(),
-            title=data["data"]["attributes"]["title"],
+            title=data["attributes"]["title"],
             # TODO: Need to figure out how to deal with LaTeX code
-            abstract=data["data"]["attributes"]["description"],
+            abstract=data["attributes"]["description"],
             # TODO: Format authors appropriately;
             # also deal with special characters
-            authors=get_authors(data["data"]["embeds"]["contributors"]),
-            # TODO: We will need to standardize the category labels
-            # somehow; this also flattens the hierarchical category groups
-            categories=[cat["text"] for grp in data["data"]["attributes"]["subjects"] for cat in grp]
+            authors=get_authors(data["embeds"]["contributors"]),
+            categories=categories
         )
         documents.append(preprint)
         i += 1
