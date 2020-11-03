@@ -119,21 +119,6 @@ def iterate_inputs(iter, max=None, verbose=True):
         yield next(iter)
         i += 1
 
-# def fit(train_set, **kwargs):
-#     """Fits a TF-IDF vectorizer to a training set."""
-#     vectorizer = TfidfVectorizer(
-#         lowercase=False,
-#         tokenizer=lambda x: x,
-#         token_pattern=None,
-#         **kwargs)
-#     vectorizer.fit(train_set)
-#     return vectorizer
-
-# def transform(model, test_set):
-#     """Given a fitted TF-IDF model, this returns a sparse matrix of
-#     document embeddings for a test set."""
-#     return model.transform(test_set)
-
 
 if __name__ == "__main__":
     import os
